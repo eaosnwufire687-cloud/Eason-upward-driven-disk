@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>上驱圆盘 · 交互式物理实验室</title>
+<meta name="description" content="CUPT 2027 Problem 8：一个恒定驱动的圆盘为什么会混沌，又为什么推得越快反而越规则。可实时调参的数值实验。">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="brand" href="#top"><span class="dot"></span> 上驱圆盘</a>
+  <div class="links">
+    <a href="#idea">现象</a>
+    <a href="#kit">装置</a>
+    <a href="#law">原理</a>
+    <a href="#lab">实验台</a>
+    <a href="#chaos">判据</a>
+    <a href="#theorem">定理</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="kicker">CUPT 2027 · Problem 8 · Upward-driven disc</p>
+    <h1>上驱圆盘</h1>
+    <p class="sub">恒定驱动，如何制造混沌</p>
+    <p class="lede">一个圆盘，两个橡胶轮，一个<b>不变</b>的转速。它却能翻转、能周期、能混沌——
+      而且把转速调高，混沌反而消失。这个页面把推导、实时仿真和判据放在一起，
+      你可以亲手把参数拖到临界点。</p>
+    <div class="cta">
+      <a class="btn primary" href="#lab">进入实验台</a>
+      <a class="btn ghost" href="#law">从原理读起</a>
+    </div>
+    <ul class="stats">
+      <li><b>3</b><span>个状态变量</span></li>
+      <li><b>2</b><span>个无量纲数</span></li>
+      <li><b>0.9 s<sup>-1</sup></b><span>最大 Lyapunov 指数</span></li>
+      <li><b>4.5 cm/s</b><span>混沌熄灭的临界驱动</span></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+<section id="idea" class="sec">
+  <div class="wrap">
+    <p class="kicker">01 · 现象</p>
+    <h2>三个反直觉的地方</h2>
+    <div class="cards three">
+      <div class="card">
+        <div class="num">01</div>
+        <h3>恒定驱动，也能混沌</h3>
+        <p>没有周期外力，没有往复推拉。混沌的"发动机"不是外力，而是约束——
+          一个显含时间的非完整约束。</p>
+      </div>
+      <div class="card">
+        <div class="num">02</div>
+        <h3>摆长是个变量</h3>
+        <p>圆盘像纸一样从辊隙里被喂上去，悬挂点固定在空间、却在盘面上滑动。
+          所以 <i>R</i> = |<i>OC</i>| 满足 <i>Ṙ</i> = <i>W</i> cos θ，是状态量。</p>
+      </div>
+      <div class="card">
+        <div class="num">03</div>
+        <h3>推得越快，越规则</h3>
+        <p>转速升到 4.5 cm/s 以上，最大 Lyapunov 指数从 0.9 掉到 0.02。
+          两个时间尺度在打架，快的那一方赢了。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kit" class="sec alt">
+  <div class="wrap grid2">
+    <figure class="fig">
+      <img src="assets/fig1_apparatus.png" alt="装置与坐标定义">
+      <figcaption>侧视：圆盘从两轮之间被向上"喂"过；正视：<i>O</i> 是辊隙，<i>C</i> 是质心。</figcaption>
+    </figure>
+    <div class="prose">
+      <p class="kicker">02 · 装置</p>
+      <h2>一个摆长会自己变的单摆</h2>
+      <p>两个橡胶轮夹住圆盘，其中一个由电机带着转，以恒定线速度 <i>W</i> 把圆盘往上推。
+        辊隙 <i>O</i> 在实验室里固定不动，但圆盘在动——所以"此刻被夹住的材料点"在不断更换。</p>
+      <p>结果就是等效摆长 <i>R</i> 可以从 0 一直变到盘的半径 <i>a</i>＝8 cm：</p>
+      <ul class="ticks">
+        <li><b>C 在 O 下方</b> — 普通单摆</li>
+        <li><b>C 经过 O</b> — 摆长归零，θ 突跳 π</li>
+        <li><b>C 在 O 上方</b> — 倒立摆</li>
+      </ul>
+      <p class="muted">同一个装置，在三种角色之间来回切换。这就是全部复杂性的入口。</p>
+    </div>
+  </div>
+</section>
+
+<section id="law" class="sec">
+  <div class="wrap">
+    <p class="kicker">03 · 原理</p>
+    <h2>三步，把"不打滑"翻译成方程</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="badge">1</div>
+        <div>
+          <h3>无滑约束</h3>
+          <p>圆盘上此刻位于 <i>O</i> 的那个材料点，速度必须等于轮缘速度 (0, <i>W</i>)。
+            用刚体平面运动公式展开，两条方程就出来了。</p>
+          <img class="eq" src="assets/eq_kin.png" alt="运动学方程">
+          <p class="note">注意：驱动力 <i>W</i> 不在方程右边——它写在<b>速度约束</b>里。
+            轮子对盘的作用力是"维持约束所需的任意大小"，这正是能量输入的方式。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="badge">2</div>
+        <div>
+          <h3>角动量</h3>
+          <p>对固定点 <i>O</i> 取角动量。接触力作用在 <i>O</i>，力臂为零、不产生力矩；
+            只剩重力矩 g<i>Y</i> 与阻尼 −<i>k</i>Ω。消去 θ，得到三个变量的一组自治方程。</p>
+          <img class="eq" src="assets/eq_dyn.png" alt="动力学方程">
+          <p class="note">写成笛卡尔坐标是故意的：这样 <i>R</i>＝0 的坐标奇点自动消失，
+            数值积分不会被"穿越辊隙"卡住。</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="badge">3</div>
+        <div>
+          <h3>无量纲化</h3>
+          <p>取 <i>a</i> 为长度、√(<i>a</i>/g) 为时间，整个系统只剩两个数。</p>
+          <img class="eq" src="assets/eq_nd.png" alt="无量纲方程">
+          <p class="note">这意味着：不同尺寸、质量、材料的圆盘，只要 (<i>w</i>, κ) 相同，
+            运动完全一样。这是这道题最"物理"的地方。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="lab" class="sec alt">
+  <div class="wrap">
+    <p class="kicker">04 · 实验台</p>
+    <h2>拖动滑块，看混沌熄灭</h2>
+    <p class="lede">下面跑的就是上面那三个方程，RK4 定步长、每帧 480 Hz。左边是装置，
+      右边是质心轨迹在盘面上的投影（慢慢累积成相图）。右下角的 λ 是两条相距 1 μm
+      的轨迹的分离率——实时算出来的，不是查表。</p>
+
+    <div class="bench">
+      <figure class="panel">
+        <canvas id="cvScene"></canvas>
+        <figcaption>装置视图 · 橙点是盘上的固定标记</figcaption>
+      </figure>
+      <figure class="panel">
+        <canvas id="cvPhase"></canvas>
+        <figcaption>相图 (Y, Z) · 虚线圆是盘缘</figcaption>
+      </figure>
+      <div class="readout">
+        <div><span>t</span><b id="vT">0.0 s</b></div>
+        <div><span>R</span><b id="vR">0.00 cm</b></div>
+        <div><span>θ</span><b id="vTh">0°</b></div>
+        <div><span>Ω</span><b id="vOm">0.00</b></div>
+        <div class="lam"><span>λ<sub>max</sub></span><b id="vLam">0.00</b></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <label>
+        <span>驱动速度 <i>W</i><b id="rWOut"></b></span>
+        <input id="rW" type="range" min="5" max="100" step="0.5" value="14">
+      </label>
+      <label>
+        <span>阻尼 <i>k</i><b id="rkOut"></b></span>
+        <input id="rk" type="range" min="0.004" max="0.05" step="0.001" value="0.011">
+      </label>
+      <label>
+        <span>盘半径 <i>a</i><b id="raOut"></b></span>
+        <input id="ra" type="range" min="40" max="100" step="5" value="80">
+      </label>
+      <label>
+        <span>初始偏移 <i>Y</i><sub>0</sub><b id="ry0Out"></b></span>
+        <input id="ry0" type="range" min="0" max="50" step="1" value="5">
+      </label>
+    </div>
+
+    <div class="bar">
+      <div class="presets">
+        <button data-west="1.4">混沌 1.4</button>
+        <button data-west="3.9">混沌 3.9</button>
+        <button data-west="5.5">周期 5.5</button>
+        <button data-west="7.1">规则 7.1</button>
+      </div>
+      <div class="actions">
+        <button id="btnPlay" class="primary">暂停</button>
+        <button id="btnClear">清空轨迹</button>
+        <button id="btnReset">重置</button>
+      </div>
+    </div>
+
+    <p id="warn" class="warn">圆盘被推出了辊隙（|OC| &gt; a）——这是模型的边界，不是物理事件。
+      点"重置"，或者把初始偏移调大一点。</p>
+
+    <figure class="chartbox">
+      <canvas id="cvChart"></canvas>
+      <figcaption>最大 Lyapunov 指数随驱动速度的变化（离线计算，46 个点，每点 260 s）。
+        金色虚线标出你当前的位置。</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="chaos" class="sec">
+  <div class="wrap">
+    <p class="kicker">05 · 判据</p>
+    <h2>凭什么说它是混沌</h2>
+    <p class="lede">相图"看起来乱"不算证据。三个独立判据，互相印证。</p>
+    <div class="cards three">
+      <div class="card">
+        <h3>Lyapunov 指数</h3>
+        <p>λ<sub>max</sub> ＝ 0.76 s⁻¹：误差每 1.1 秒放大 <i>e</i> 倍，一个摆动周期里放大十倍。</p>
+      </div>
+      <div class="card">
+        <h3>初值敏感性</h3>
+        <p>两条轨迹相差 1 μm，15 秒后差到厘米量级，完全无关。</p>
+      </div>
+      <div class="card">
+        <h3>相空间填充</h3>
+        <p>低驱动时轨迹填满一片区域；高驱动时退化成有限条闭合曲线。</p>
+      </div>
+    </div>
+    <figure class="fig wide">
+      <img src="assets/fig5_divergence.png" alt="初值敏感性与指数分离">
+      <figcaption>左：两条相差 1 μm 的轨迹。右：分离量的对数随时间线性增长，斜率就是 λ。</figcaption>
+    </figure>
+    <figure class="fig wide">
+      <img src="assets/fig2_regimes.png" alt="四种驱动速度下的相图">
+      <figcaption>四个驱动速度下的质心轨迹。标题里的数字就是 λ<sub>max</sub>。</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="theorem" class="sec alt">
+  <div class="wrap">
+    <p class="kicker">06 · 结果</p>
+    <h2>一个否定性定理</h2>
+    <div class="grid2">
+      <div class="prose">
+        <p>文献里报告了一个经典模型解释不了的状态：质心停在中心偏一点的地方，
+          <i>Z</i>＝0，匀速自转，能转一个多小时；从静止到不了，一碰就掉。</p>
+        <p>平衡点确实存在：<i>Y</i><sub>0</sub>² ＝ <i>kW</i>/g，Ω<sub>0</sub> ＝ <i>W</i>/<i>Y</i><sub>0</sub>。
+          代入 W＝7 cm/s 得偏移 0.9 cm、1.3 转/秒，与实验吻合。</p>
+        <p>缺的是<b>稳定性</b>。线性化之后用 Routh–Hurwitz 判据，稳定要求的
+          <i>mp</i> &gt; <i>q</i> 恒不成立：</p>
+        <img class="eq" src="assets/eq_rot.png" alt="稳态自转的稳定性判据">
+        <p class="strong">只要摩擦力矩只依赖 Ω，稳态自转恒不稳定——与参数无关。</p>
+        <p class="muted">线性、二次、库仑、带静摩擦阈值的阻尼，全都救不了它。
+          唯一的修复方向是让约束本身允许打滑。</p>
+      </div>
+      <figure class="fig">
+        <img src="assets/fig6_rotation.png" alt="稳态自转的位置与逃逸率">
+        <figcaption>左：平衡点位置。右：经典模型给出的逃逸率——5 到 10 秒，
+          而实验里它转了一小时。</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="limits" class="sec">
+  <div class="wrap">
+    <p class="kicker">07 · 边界</p>
+    <h2>做到了什么，没做到什么</h2>
+    <table class="tbl">
+      <tr><th>复现</th><td>翻转循环、θ 的 ±π 突跳、混沌到规则的抑制（临界约 4.5 cm/s）</td></tr>
+      <tr><th>新结果</th><td>稳态自转恒不稳定的定理；混沌抑制的时间尺度判据</td></tr>
+      <tr><th>不确定</th><td><i>k</i> 无法从第一性原理算出，是唯一的拟合参数</td></tr>
+      <tr><th>已知偏差</th><td>仿真轨道尺度偏小，文献中 <i>R</i> 可达 7.5 cm</td></tr>
+      <tr><th>下一步</th><td>引入辊隙打滑，得到临界驱动 <i>W</i><sub>c</sub>(μ)，再用二十元的装置验证</td></tr>
+    </table>
+    <p class="muted">后两条其实是同一个缺失物理的两个症状——这比"完美复现"更说明问题在哪。</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><b>可复现</b>　全站图表与动画由 <code>disk_model.py</code> / <code>make_figures.py</code> 生成，
+      网页里的实时仿真与之一一对应。</p>
+    <p><b>参考</b>　L. Maas, <i>The upward-driven disk, a steadily forced chaotic pendulum</i>,
+      Am. J. Phys. <b>93</b>, 620 (2025). arXiv:2505.17957</p>
+    <p class="small">CUPT 2027 校内选拔 · 个人作品 · 本页所有数值结果均由本人代码生成</p>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
